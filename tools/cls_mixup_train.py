@@ -199,13 +199,18 @@ def save_checkpoint(model, optimizer, cur_acc, epoch):
     state = {'epoch': epoch + 1, 'state_dict': model.state_dict(), 'acc': cur_acc, 'best_acc': BEST_ACC,
              'optimizer': optimizer.state_dict()}
 
-    torch.save(state, '{}/model_{}'.format(cfg.CLS.ckpt, suffix_latest))
+    try:
+        # add time.sleep to avoid model fails to save in ava. By Riheng 2018/11/26
+        time.sleep(4)
+        torch.save(state, '{}/model_{}'.format(cfg.CLS.ckpt, suffix_latest))
 
-    if cur_acc > BEST_ACC:
-        # update BEST_ACC
-        BEST_ACC = cur_acc
-        shutil.copyfile('{}/model_{}'.format(cfg.CLS.ckpt, suffix_latest),
-                        '{}/model_{}'.format(cfg.CLS.ckpt, suffix_best))
+        if cur_acc > BEST_ACC:
+            # update BEST_ACC
+            BEST_ACC = cur_acc
+            shutil.copyfile('{}/model_{}'.format(cfg.CLS.ckpt, suffix_latest),
+                            '{}/model_{}'.format(cfg.CLS.ckpt, suffix_best))
+    except Exception, e:
+        print("Error: {}".format(e))
 
 
 def adjust_learning_rate(optimizer, epoch, batch=0, batch_per_epoch=5000):
