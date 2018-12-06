@@ -57,7 +57,8 @@ __C.CLS.pretrained = ''  # path to pretrained model
 __C.CLS.cosine_lr = False  # using cosine learning rate
 __C.CLS.validate = True  # validate
 __C.CLS.evaluate = False  # evaluate
-
+__C.CLS.drop_prob = 0. # drop probability
+__C.CLS.block_size = 5 # dropblock size
 
 def _merge_a_into_b(a, b):
     """Merge config dictionary a into config dictionary b, clobbering the

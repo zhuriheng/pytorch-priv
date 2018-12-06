@@ -18,8 +18,8 @@ class LinearScheduler(nn.Module):
         return self.dropblock(x)
 
     def step(self):
-        if self.i.data[0] < len(self.drop_values):
+        if self.i[0] < len(self.drop_values):
             # if self.i.data[0] < self.drop_values.shape[0]:
-            self.dropblock.drop_prob.data = self.drop_values[self.i.data[0]]
+            self.dropblock.drop_prob[0] = self.drop_values[self.i[0]]
             #print('{}: {:.6f}'.format(self.i.data[0], self.dropblock.drop_prob))
         self.i.add_(1)

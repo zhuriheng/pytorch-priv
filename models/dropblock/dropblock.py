@@ -41,7 +41,7 @@ class DropBlock2D(nn.Module):
             "Expected input with 4 dimensions (bsize, channels, height, width)"
 
         # if not self.training or self.drop_prob == 0.:
-        if not self.training or self.drop_prob.data[0] == 0.:
+        if not self.training or self.drop_prob[0] == 0.:
             return x
         else:
             # sample from a mask
@@ -60,8 +60,7 @@ class DropBlock2D(nn.Module):
             # sample mask
             # modified by Riheng 2018/11/22
             #mask = Bernoulli(gamma).sample((x.shape[0], *mask_sizes))  # *mask_sizes for python3
-            mask = Bernoulli(gamma).sample(
-                (x.shape[0], mask_height, mask_width))
+            mask = Bernoulli(gamma).sample((x.shape[0], mask_height, mask_width)) # can not run in torch0.3.1
 
             # place mask on input device
             mask = mask.to(x.device)
@@ -106,7 +105,7 @@ class DropBlock2D(nn.Module):
         feat_area = x.shape[-2] * x.shape[-1]
         mask_area = mask_sizes[-2] * mask_sizes[-1]
         # return (self.drop_prob / (self.block_size ** 2)) * (feat_area / mask_area)
-        return (self.drop_prob.data[0] / (self.block_size ** 2)) * (feat_area / mask_area)
+        return (self.drop_prob[0] / (self.block_size ** 2)) * (feat_area / mask_area)
 
 
 class DropBlock3D(DropBlock2D):
